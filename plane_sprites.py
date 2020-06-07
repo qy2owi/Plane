@@ -1,7 +1,7 @@
 '''
 @Author: qy2owi
 @Date: 2020-05-22 23:21:58
-@LastEditTime: 2020-06-08 00:59:55
+@LastEditTime: 2020-06-09 00:09:41
 @Description: file content
 '''
 # pylint: disable = no-member
@@ -14,7 +14,8 @@ CREATE_ENEMY_EVENT = pygame.USEREVENT
 SCREEN_RECT = pygame.Rect(0,0,480,700)
 # 定义屏幕刷新帧率常量
 FRAME_PER_SEC = 60
-
+# 飞机发射子弹事件常量定义
+HERO_FIRE_EVENT = pygame.USEREVENT + 1 
 
 class GameSprite(pygame.sprite.Sprite):
     """游戏精灵基类"""
@@ -101,6 +102,9 @@ class Hero(GameSprite):
         print (self.rect.centerx)
         self.rect.bottom = SCREEN_RECT.bottom - 80
 
+        # 设置子弹精灵组
+        self.bullets = pygame.sprite.Group()
+
 
     def update(self):
 
@@ -112,7 +116,34 @@ class Hero(GameSprite):
         elif self.rect.right > SCREEN_RECT.right:
             self.rect.right = SCREEN_RECT.right
 
+    def fire(self):
 
+        for i in [0,1,2,3]:
+
+            # 创建子弹对象
+            bullet = Bullet()
+
+            # 设置精灵位置
+            bullet.rect.bottom  = self.rect.y - 20 * i 
+            bullet.rect.centerx  =  self.rect.centerx
+
+            # 将该精灵添加到子弹的精灵组
+            self.bullets.add(bullet)
+
+
+class Bullet(GameSprite):
+
+    def __init__ (self):
+        super().__init__("./images/bullet1.png",-3)
+    
+
+    def update(self):
+        
+        super().update()
+
+        # 判断子弹 如果飞出屏幕 则从精灵组中删除
+        if self.rect.bottom < 0:
+            self.kill()
 
 
 

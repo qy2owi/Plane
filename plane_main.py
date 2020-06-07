@@ -1,7 +1,7 @@
 '''
 @Author: qy2owi
 @Date: 2020-05-21 11:37:48
-@LastEditTime: 2020-06-08 01:00:44
+@LastEditTime: 2020-06-09 00:08:32
 @Description: file content
 '''
 #导入模块
@@ -24,6 +24,9 @@ class PlaneGame(object):
         self.__create_sprites()
         # 设置定时器事件 第一个值为事件ID 第二个值为事件触发间隔的毫秒值
         pygame.time.set_timer(CREATE_ENEMY_EVENT,1000)
+        # 设置发射子弹的定时器， 每0.5 发射一次子弹
+        pygame.time.set_timer(HERO_FIRE_EVENT,500)
+
 
     def __create_sprites(self):
         """创建精灵组"""
@@ -40,6 +43,7 @@ class PlaneGame(object):
         # 英雄组
         self.hero = Hero()
         self.hero_group = pygame.sprite.Group(self.hero)
+
 
     def start_game(self):
         print("游戏开始")
@@ -65,6 +69,8 @@ class PlaneGame(object):
             elif event.type == CREATE_ENEMY_EVENT:
                 self.enemy_group.add(Enemy())
                 print("敌机出现了")
+            elif event.type == HERO_FIRE_EVENT:
+                self.hero.fire()
 
         # 使用键盘提供的方法获取键盘的值 - 按键元祖
         keys_pressed = pygame.key.get_pressed()
@@ -83,7 +89,7 @@ class PlaneGame(object):
 
     def __update_sprites(self):
         """更新精灵组"""
-        for group in [self.back_group,self.enemy_group,self.hero_group]:
+        for group in [self.back_group,self.enemy_group,self.hero_group,self.hero.bullets]:
             group.update()
             group.draw(self.screen)
 
