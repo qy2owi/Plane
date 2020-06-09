@@ -1,7 +1,7 @@
 '''
 @Author: qy2owi
 @Date: 2020-05-21 11:37:48
-@LastEditTime: 2020-06-09 00:08:32
+@LastEditTime: 2020-06-09 21:04:38
 @Description: file content
 '''
 #导入模块
@@ -85,7 +85,17 @@ class PlaneGame(object):
 
     def __check_collide(self):
         """碰撞检测"""
-        pass
+        # 1. 子弹摧毁敌机
+        pygame.sprite.groupcollide(self.hero.bullets,self.enemy_group, True, True)
+        # 2. 敌机摧毁战机
+        enemies = pygame.sprite.spritecollide(self.hero,self.enemy_group,True)
+
+        # 销毁战机
+
+        if len(enemies) > 0 : 
+            self.hero.kill()
+
+            PlaneGame.__game_over()
 
     def __update_sprites(self):
         """更新精灵组"""
